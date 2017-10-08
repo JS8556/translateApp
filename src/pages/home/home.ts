@@ -12,9 +12,12 @@ export class HomePage {
   private langFrom:String = '';
   private langTo:String = '';
   private cardContent:String = '';
+  private cardList:Array<string>;
+  private cardContent2:string = '';
 
   constructor(public navCtrl: NavController, private translation: TranslationData) {
 
+    this.cardList = new Array<string>();
   }
 
   /**
@@ -32,8 +35,11 @@ export class HomePage {
 
     // pass text for translation to translation service
     this.translation.getTranslation(this.textForTranslation, this.langFrom, this.langTo).subscribe( (result) => {
-      this.cardContent = result.responseData.translatedText;
+      this.cardContent = this.textForTranslation + ' -> ' + result.responseData.translatedText;
+      this.cardList.push(this.textForTranslation + ' -> ' + result.responseData.translatedText);
     });
+    this.cardContent2 = this.cardList.toString();
+    
   }
 
 }
