@@ -6,16 +6,40 @@
 
 <ion-content padding>
   <h2>Translator</h2>
-  <ion-list>
-    
+  <ion-list>   
       <ion-item>
         <ion-label fixed>Your text</ion-label>
         <ion-input #tText type="text" value=""></ion-input>
       </ion-item>
+  </ion-list>
 
-    </ion-list>
+  <ion-list>
+    <ion-item>
+      <ion-label>From</ion-label>
+      <ion-select [(ngModel)]="from">
+        <ion-option value="cs">Czech</ion-option>
+        <ion-option value="en">English</ion-option>
+        <ion-option value="de">German</ion-option>
+        <ion-option value="es">Spanish</ion-option>
+        <ion-option value="it">Italian</ion-option>
+      </ion-select>
+    </ion-item>
+  </ion-list>
 
-    <button (click)="translateClick(tText.value)" ion-button full>Translate</button>
+  <ion-list>
+    <ion-item>
+      <ion-label>To</ion-label>
+      <ion-select [(ngModel)]="to">
+        <ion-option value="cs">Czech</ion-option>
+        <ion-option value="en">English</ion-option>
+        <ion-option value="de">German</ion-option>
+        <ion-option value="es">Spanish</ion-option>
+        <ion-option value="it">Italian</ion-option>
+      </ion-select>
+    </ion-item>
+  </ion-list>
+
+    <button (click)="translateClick(tText.value,from,to)" ion-button full>Translate</button>
 
     <ion-card>
       
