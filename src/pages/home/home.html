@@ -10,6 +10,9 @@
       <ion-item>
         <ion-label fixed>Your text</ion-label>
         <ion-input #tText type="text" value=""></ion-input>
+        <button (click)="speechToText()" ion-button item-right clear>
+          <ion-icon name="mic"></ion-icon>
+        </button>
       </ion-item>
   </ion-list>
 

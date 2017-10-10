@@ -2,6 +2,9 @@ import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { TranslationData } from '../../providers/translation-data';
 
+//speechrec lib
+import { SpeechRecognition } from '@ionic-native/speech-recognition';
+
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
@@ -15,9 +18,19 @@ export class HomePage {
   private cardList:Array<string>;
   private cardContent2:string = '';
 
-  constructor(public navCtrl: NavController, private translation: TranslationData) {
+  private speechToTextEnabled:boolean = false;
+
+  constructor(public navCtrl: NavController, private translation: TranslationData, private speechRecognition:SpeechRecognition) {
 
     this.cardList = new Array<string>();
+
+    //test speechrec is available
+    this.speechRecognition.isRecognitionAvailable().then(
+      (availability:boolean) => {
+        this.speechToTextEnabled = availability;
+      }
+    );
+
   }
 
   /**
@@ -40,6 +53,56 @@ export class HomePage {
     });
     this.cardContent2 = this.cardList.toString();
     
+  }
+
+
+
+  private recogniseSpeech(){
+
+    let options = {
+      language: "en-US"
+    };
+
+    this.speechRecognition.startListening(options).subscribe(
+      (matches: Array<string>) => {
+        //we get array of recognised words
+        let text = matches.join(' ');
+
+        this.translateClick(text, 'en', 'cs');
+      }
+    );
+  }
+
+  //mic event handler
+  speechToText()
+  {
+    if(this.speechToTextEnabled){
+      //check permissions
+      this.speechRecognition.hasPermission().then(
+        (hasPermission:boolean) => {
+          if(hasPermission){
+            //we have permission, start recognition
+            this.recogniseSpeech();
+          }else{
+            //request permission
+            this.speechRecognition.requestPermission().then(
+              () => {
+                //permission granted
+                this.recogniseSpeech();
+              },
+              () => {
+                //permission denied
+
+              }
+            );
+          }
+        }
+      );
+    }else{
+      console.log('Speechrec not available');
+    }
+
+
   }
 
 }
